@@ -6,5 +6,5 @@ Group 1
 Hubeyb Awol —--1067/16
 Kidanework Yirga —--- 1152/16
 Mahlet Chanyalew —--- 3963/16(Github Username: Mahlett2)
-Mena Mulugeta —---- 1320/16
+Mena Mulugeta —---- 1320/16(Github username- Mena-M16)
 Murad Bzuneh —----- 1492/16(Github username muradbzuneh )
