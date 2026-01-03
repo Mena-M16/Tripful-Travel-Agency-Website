@@ -1,0 +1,135 @@
+
+1️⃣ USERS & AUTHENTICATION TABLES
+
+users
+Stores all system users (customers, admins, staff).
+
+| Field       | Type                             | Description           |
+| ----------- | -------------------------------- | --------------------- |
+| id          | SERIAL / UUID (PK)               | Unique user ID        |
+| full_name   | VARCHAR(100)                     | User full name        |
+| email       | VARCHAR(100)                     | Unique email          |
+| phone       | VARCHAR(20)                      | Phone number          |
+| password    | VARCHAR(255)                     | Hashed password       |
+| role        | ENUM('customer','admin','staff') | User role             |
+| is_verified | BOOLEAN                          | Email/phone verified  |
+| created_at  | TIMESTAMP                        | Account creation date |
+| updated_at  | TIMESTAMP                        | Last update           |
+
+
+2️⃣ TRAVEL PACKAGES TABLES
+
+destinations
+Stores travel destinations.
+
+| Field       | Type         | Description                                  |
+| ----------- | ------------ | -------------------------------------------- |
+| id          | SERIAL (PK)  | Unique identifier for each destination       |
+| name        | VARCHAR(100) | Name of the destination (e.g, Dessie, jimaa) |
+| country     | VARCHAR(100) | Country where the destination is located     |
+| description | TEXT         | Detailed information about the destination   |
+| image       | TEXT         | Image URL or file path of the destination    |
+| created_at  | TIMESTAMP    | Date when the destination was added          |
+          
+
+
+
+packages
+Main travel packages.
+
+| Field          | Type                  | Description                            |
+| -------------- | --------------------- | -------------------------------------- |
+| id             | SERIAL (PK)           | Unique identifier for each package     |
+| destination_id | FK → destinations(id) | Links package to a destination         |
+| title          | VARCHAR(150)          | Package name/title                     |
+| description    | TEXT                  | Full description of the travel package |
+| price          | DECIMAL(10,2)         | Cost of the package                    |
+| duration_days  | INT                   | Number of days for the trip            |
+| max_people     | INT                   | Maximum allowed travelers              |
+| status         | ENUM                  | Current availability of the package    |
+| created_at     | TIMESTAMP             | Date the package was created           |
+           
+
+
+3️⃣ BOOKING SYSTEM TABLES
+
+bookings
+Stores user bookings.
+
+
+| Field            | Type              | Description                                  |
+| ---------------- | ----------------- | -------------------------------------------- |
+| id               | SERIAL (PK)       | Unique booking identifier                    |
+| user_id          | FK → users(id)    | User who made the booking                    |
+| package_id       | FK → packages(id) | Booked travel package                        |
+| booking_date     | TIMESTAMP         | Date and time of booking                     |
+| travel_date      | DATE              | Planned travel date                          |
+| number_of_people | INT               | Number of travelers                          |
+| total_price      | DECIMAL(10,2)     | Total calculated cost                        |
+| status           | ENUM              | Booking status (pending/confirmed/cancelled) |
+           
+
+
+4️⃣ PAYMENT TABLES (CHAPA / ONLINE PAYMENT)
+
+payments
+Stores payment records.
+
+
+| Field           | Type              | Description                  |
+| --------------- | ----------------- | ---------------------------- |
+| id              | SERIAL (PK)       | Unique payment ID            |
+| booking_id      | FK → bookings(id) | Related booking              |
+| user_id         | FK → users(id)    | User who made the payment    |
+| amount          | DECIMAL(10,2)     | Amount paid                  |
+| payment_method  | ENUM              | Payment type (Chapa or cash) |
+| transaction_ref | VARCHAR(100)      | Payment gateway reference    |
+| status          | ENUM              | Payment result               |
+| paid_at         | TIMESTAMP         | Date of successful payment   |
+
+
+
+5️⃣ REVIEWS & RATINGS
+
+reviews
+Customer feedback.
+
+| Field      | Type              | Description               |
+| ---------- | ----------------- | ------------------------- |
+| id         | SERIAL (PK)       | Unique review ID          |
+| user_id    | FK → users(id)    | User who wrote the review |
+| package_id | FK → packages(id) | Reviewed package          |
+| rating     | INT (1–5)         | Star rating               |
+| comment    | TEXT              | User feedback             |
+| created_at | TIMESTAMP         | Review submission date    |
+
+
+
+6️⃣ ADMIN & SYSTEM SUPPORT TABLES
+
+staff_actions
+Track admin/staff activities (very good for tools marks).
+
+| Field      | Type           | Description                          |
+| ---------- | -------------- | ------------------------------------ |
+| id         | SERIAL (PK)    | Unique action record                 |
+| staff_id   | FK → users(id) | Staff or admin performing the action |
+| action     | VARCHAR(200)   | Description of the action            |
+| target_id  | INT            | Affected record ID                   |
+| created_at | TIMESTAMP      | Date of action                       |
+
+
+
+7️⃣ BASIC RELATIONSHIPS (ER EXPLANATION)
+
+users → bookings → One-to-Many
+
+packages → bookings → One-to-Many
+
+bookings → payments → One-to-One
+
+users → notifications → One-to-Many
+
+packages → reviews → One-to-Many
+
+destinations → packages → One-to-Many
